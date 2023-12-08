@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Move : MonoBehaviour
@@ -29,6 +30,7 @@ public class Move : MonoBehaviour
 
     #endregion
 
+    private bool isJump;
     private bool isRun;
     private bool isGround;
     private bool isSit;
@@ -43,6 +45,7 @@ public class Move : MonoBehaviour
         cam.transform.localPosition = new Vector3(0, sitUpPos, 0);
         applySpeed = walkSpeed;
         applySitPos = sitUpPos;
+        isJump = true;
         isRun = false;
         isGround = true;
         isSit = true;
@@ -56,46 +59,37 @@ public class Move : MonoBehaviour
     private void Update()
     {
         Move_Input();
+        TrySit();
     }
 
     private void Moving()
     {
         IsGround();
-        TrySit();
-        TryRun();
         TryJump();
+        TryRun();
         camVer();
         camHor();
     }
 
     private void TryRun()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (isRun)
         {
             Runnig();
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift) && isRun)
+        if (!isRun)
         {
             RunningCancle();
         }
-    }
-
-    private void Runnig()
-    {
-        isRun = true;
-        applySpeed = runSpeed;
-    }
-
-    private void RunningCancle()
-    {
-        isRun = false;
-        applySpeed = walkSpeed;
     }
 
     private void Move_Input()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
+        isRun = Input.GetKey(KeyCode.LeftShift);
+        isJump = !Input.GetKey(KeyCode.Space);
+        isSit = Input.GetKey(KeyCode.LeftControl);
 
         Vector3 _movHor = transform.right * h;
         Vector3 _movVer = transform.forward * v;
@@ -105,10 +99,18 @@ public class Move : MonoBehaviour
         rigid.MovePosition(transform.position + _Move * Time.deltaTime);
     }
 
+    private void Runnig()
+    {
+        applySpeed = runSpeed;
+    }
+
+    private void RunningCancle()
+    {
+        applySpeed = walkSpeed;
+    }
+
     private void TrySit()
     {
-        isSit = Input.GetKey(KeyCode.LeftControl);
-
         if (isSit)
         {
             applySpeed = sitSpeed;
@@ -139,7 +141,7 @@ public class Move : MonoBehaviour
 
     private void TryJump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGround)
+        if (!isJump && isGround)
         {
             Jump();
         }
@@ -147,12 +149,15 @@ public class Move : MonoBehaviour
 
     private void Jump()
     {
+        isJump = true;
         rigid.velocity = transform.up * jumpForce;
     }
 
     private void IsGround()
     {
         isGround = Physics.Raycast(transform.position, Vector3.down, capsule.bounds.extents.y + 0.1f);
+        
+        if(!isGround) isJump = true;
     }
 
     private void camVer()

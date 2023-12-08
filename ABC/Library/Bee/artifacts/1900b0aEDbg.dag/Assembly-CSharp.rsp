@@ -358,6 +358,7 @@
 "Assets/Resources/02.Scripts/DataManager.cs"
 "Assets/Resources/02.Scripts/LifeCycle.cs"
 "Assets/Resources/02.Scripts/Move.cs"
+"Assets/Resources/02.Scripts/Player.cs"
 "Assets/Sport Car - 3D model/Scripts/CameraScript.cs"
 "Assets/Sport Car - 3D model/Scripts/LightEffects.cs"
 -langversion:9.0
