@@ -1,0 +1,184 @@
+using System.Runtime.CompilerServices;
+using UnityEngine;
+
+public class Move : MonoBehaviour
+{
+    #region 카메라
+
+    [SerializeField]
+    private Camera cam;
+    private float curCamRot;
+    private readonly float camLimit = 90f;
+    private readonly float sense = 1.3f;
+
+    private float applySitPos;
+    private readonly float sitDownPos = 0f;
+    private readonly float sitUpPos = 0.5f;
+
+    #endregion
+
+    #region 플레이어
+
+    private readonly float walkSpeed = 3f;
+    private readonly float runSpeed = 6f;
+    private readonly float sitSpeed = 1.8f;
+
+    [SerializeField]
+    private float applySpeed;
+
+    private readonly float jumpForce = 2.5f;
+
+    #endregion
+
+    private bool isJump;
+    private bool isRun;
+    private bool isGround;
+    private bool isSit;
+
+    private Rigidbody rigid;
+    private CapsuleCollider capsule;
+
+    private void Start()
+    {
+        rigid = GetComponent<Rigidbody>();
+        capsule = GetComponent<CapsuleCollider>();
+        cam.transform.localPosition = new Vector3(0, sitUpPos, 0);
+        applySpeed = walkSpeed;
+        applySitPos = sitUpPos;
+        isJump = true;
+        isRun = false;
+        isGround = true;
+        isSit = true;
+    }
+
+    private void FixedUpdate()
+    {
+        Moving();
+    }
+
+    private void Update()
+    {
+        Move_Input();
+        TrySit();
+    }
+
+    private void Moving()
+    {
+        IsGround();
+        TryJump();
+        TryRun();
+        camVer();
+        camHor();
+    }
+
+    private void TryRun()
+    {
+        if (isRun)
+        {
+            Runnig();
+        }
+        if (!isRun)
+        {
+            RunningCancle();
+        }
+    }
+
+    private void Move_Input()
+    {
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+        isRun = Input.GetKey(KeyCode.LeftShift);
+        isJump = !Input.GetKey(KeyCode.Space);
+        isSit = Input.GetKey(KeyCode.LeftControl);
+
+        Vector3 _movHor = transform.right * h;
+        Vector3 _movVer = transform.forward * v;
+
+        Vector3 _Move = (_movHor + _movVer).normalized * applySpeed;
+
+        rigid.MovePosition(transform.position + _Move * Time.deltaTime);
+    }
+
+    private void Runnig()
+    {
+        applySpeed = runSpeed;
+    }
+
+    private void RunningCancle()
+    {
+        applySpeed = walkSpeed;
+    }
+
+    private void TrySit()
+    {
+        if (isSit)
+        {
+            applySpeed = sitSpeed;
+            applySitPos = sitDownPos;
+            Sit();
+        }
+        else
+        {
+            applySpeed = walkSpeed;
+            applySitPos = sitUpPos;
+            SitCancle();
+        }
+    }
+
+    private void Sit()
+    {
+        float _PosY = cam.transform.localPosition.y;
+        _PosY = Mathf.Lerp(_PosY, applySitPos, Time.deltaTime * 8f);
+        cam.transform.localPosition = new Vector3(0, _PosY, 0);
+    }
+
+    private void SitCancle()
+    {
+        float PosY = cam.transform.localPosition.y;
+        PosY = Mathf.Lerp(PosY, applySitPos, Time.deltaTime * 8f);
+        cam.transform.localPosition = new Vector3(0, PosY, 0);
+    }
+
+    private void TryJump()
+    {
+        if (!isJump && isGround)
+        {
+            Jump();
+        }
+    }
+
+    private void Jump()
+    {
+        isJump = true;
+        rigid.velocity = transform.up * jumpForce;
+    }
+
+    private void IsGround()
+    {
+        isGround = Physics.Raycast(transform.position, Vector3.down, capsule.bounds.extents.y + 0.1f);
+        
+        if(!isGround) isJump = true;
+    }
+
+    private void camVer()
+    {
+        float Rot_X = Input.GetAxisRaw("Mouse Y");
+
+        float _camRotX = Rot_X * sense;
+
+        curCamRot -= _camRotX;
+
+        curCamRot = Mathf.Clamp(curCamRot, -camLimit, camLimit);
+
+        cam.transform.localEulerAngles = new Vector3(curCamRot, 0, 0);
+    }
+
+    private void camHor()
+    {
+        float Rot_Y = Input.GetAxisRaw("Mouse X");
+
+        Vector3 _camRotY = new Vector3(0, Rot_Y, 0) * sense;
+
+        rigid.MoveRotation(transform.rotation * Quaternion.Euler(_camRotY));
+    }
+}
