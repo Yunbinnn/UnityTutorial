@@ -364,6 +364,7 @@
 "Assets/01.UGUI/02.Scripts/MainMenu.cs"
 "Assets/01.UGUI/02.Scripts/TextManager.cs"
 "Assets/02.Move/02.Scripts/PlayerController.cs"
+"Assets/03.Terrain/02.Scripts/FindPlayer.cs"
 -langversion:9.0
 
 /deterministic

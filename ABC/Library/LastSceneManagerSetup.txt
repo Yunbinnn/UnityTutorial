@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/02.Move/01.Scenes/New Scene.unity
+- path: Assets/01.UGUI/01.Scenes/Main Menu.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
