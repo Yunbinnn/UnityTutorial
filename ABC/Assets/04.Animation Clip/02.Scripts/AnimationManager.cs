@@ -28,6 +28,7 @@ public class AnimationManager : MonoBehaviour
             // 현재 진행한 애니메이션의 실행 상태를 의미합니다.
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
             {
+                // SetActive : 게임 오브젝트를 활성화 또는 비활성화할 수 있는 함수입니다.
                 animator.gameObject.SetActive(false);
             }
         }

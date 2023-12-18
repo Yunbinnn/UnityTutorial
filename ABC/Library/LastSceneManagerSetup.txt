@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/04.Animation Clip/01.Scene/Animation Clip Example.unity
+- path: Assets/05.Sound/01.Scene/Sound Example.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0

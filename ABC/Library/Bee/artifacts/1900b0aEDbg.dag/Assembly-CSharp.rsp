@@ -367,6 +367,8 @@
 "Assets/03.Terrain/02.Scripts/DeleteCamera.cs"
 "Assets/04.Animation Clip/02.Scripts/AnimationManager.cs"
 "Assets/04.Animation Clip/02.Scripts/Parallax.cs"
+"Assets/05.Sound/02.Scripts/AudioManager.cs"
+"Assets/05.Sound/02.Scripts/Drone.cs"
 -langversion:9.0
 
 /deterministic
