@@ -369,6 +369,7 @@
 "Assets/04.Animation Clip/02.Scripts/Parallax.cs"
 "Assets/05.Sound/02.Scripts/AudioManager.cs"
 "Assets/05.Sound/02.Scripts/Drone.cs"
+"Assets/06.Instatiate/02.Scripts/SpawnManager.cs"
 -langversion:9.0
 
 /deterministic
