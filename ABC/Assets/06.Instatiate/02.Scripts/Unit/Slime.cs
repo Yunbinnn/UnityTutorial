@@ -1,9 +1,9 @@
-using UnityEngine;
-
 public class Slime : Unit
 {
-    public override void Move()
+    protected override void Move()
     {
-        Debug.Log("Slime Move");
+        traceSpeed = 1.35f;
+        lerpSpeed = 3f;
+        base.Move();
     }
 }

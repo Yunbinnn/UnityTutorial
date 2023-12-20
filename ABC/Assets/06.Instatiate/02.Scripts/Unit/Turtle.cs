@@ -1,9 +1,9 @@
-using UnityEngine;
-
 public class Turtle : Unit
 {
-    public override void Move()
+    protected override void Move()
     {
-        Debug.Log("Turtle Move");
+        traceSpeed = 1.15f;
+        lerpSpeed = 3f;
+        base.Move();
     }
 }

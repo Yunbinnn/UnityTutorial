@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class StoneMonster : Unit
 {
-    public override void Move()
+    protected override void Move()
     {
-        Debug.Log("Stone Monster Move");
+        traceSpeed = 2f;
+        lerpSpeed = 3f;
+        base.Move();
     }
 }
