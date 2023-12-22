@@ -1,9 +1,12 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public enum State
 {
     Move,
     Attack,
+    Hit,
     Die,
 }
 
@@ -15,6 +18,9 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] State state;
     [SerializeField] Animator animator;
     [SerializeField] GameObject target;
+    [SerializeField] protected float health;
+
+    private bool isCheck = false;
 
     private void Awake()
     {
@@ -29,6 +35,8 @@ public abstract class Unit : MonoBehaviour
             case State.Move: Move();
                 break;
             case State.Attack: Attack();
+                break;
+            case State.Hit: OnHit(10); 
                 break;
             case State.Die: Die();
                 break;
@@ -55,26 +63,48 @@ public abstract class Unit : MonoBehaviour
         animator.SetBool("Attack", true);
     }
 
-    protected void Die()
+    protected virtual void Die()
     {
+        animator.Play("Die");
+    }
 
+    private void OnHit(float damage)
+    {
+        health -= damage;
+
+        animator.SetTrigger("Hit");
+
+        if (isCheck) state = State.Attack;
+        else state = State.Move;
+
+        if (health <= 0)
+        {
+            state = State.Die;
+        }
+    }
+
+    public virtual void Release()
+    {
+        Destroy(gameObject);
     }
 
     // OnTriggerEnter() : Trigger와 충돌이 되었을 때 이벤트를 호출하는 함수입니다.
     private void OnTriggerEnter(Collider other)
     {
         state = State.Attack;
+        isCheck = true;
     }
 
     // OnTriggerStay() : Trigger가 충돌 중일 때 이벤트를 호출하는 함수입니다.
     private void OnTriggerStay(Collider other)
     {
-        Debug.Log("OnTriggerStay");
+
     }
 
     // OnTriggerExit() : Trigger와 충돌이 끝났을 때 이벤트를 호출하는 함수입니다.
     private void OnTriggerExit(Collider other)
     {
         state = State.Move;
+        isCheck = false;
     }
 }
