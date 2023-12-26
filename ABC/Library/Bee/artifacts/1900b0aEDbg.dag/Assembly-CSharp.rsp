@@ -371,6 +371,7 @@
 "Assets/05.Sound/02.Scripts/Drone.cs"
 "Assets/06.Instatiate/02.Scripts/Factory.cs"
 "Assets/06.Instatiate/02.Scripts/Mouse.cs"
+"Assets/06.Instatiate/02.Scripts/SoundManager.cs"
 "Assets/06.Instatiate/02.Scripts/SpawnManager.cs"
 "Assets/06.Instatiate/02.Scripts/Unit/Slime.cs"
 "Assets/06.Instatiate/02.Scripts/Unit/Turtle.cs"

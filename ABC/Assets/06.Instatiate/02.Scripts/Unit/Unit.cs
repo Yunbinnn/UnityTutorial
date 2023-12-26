@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public enum State
 {
@@ -8,6 +6,14 @@ public enum State
     Attack,
     Hit,
     Die,
+    None,
+}
+
+public enum SOUND
+{
+    ATTACK,
+    ONHIT,
+    DIE,
 }
 
 public abstract class Unit : MonoBehaviour
@@ -19,6 +25,8 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] Animator animator;
     [SerializeField] GameObject target;
     [SerializeField] protected float health;
+
+    [SerializeField] Sound sound = new();
 
     private bool isCheck = false;
 
@@ -40,6 +48,8 @@ public abstract class Unit : MonoBehaviour
                 break;
             case State.Die: Die();
                 break;
+            case State.None: 
+                break;
         }
     }
 
@@ -58,6 +68,16 @@ public abstract class Unit : MonoBehaviour
         transform.forward = Vector3.Lerp(transform.forward, direction, Time.deltaTime * lerpSpeed);
     }
 
+    protected void AttackSound()
+    {
+        SoundManager.instance.Sound(sound.audioClips[(int)SOUND.ATTACK]);
+    }
+
+    protected void OnHitSound()
+    {
+        SoundManager.instance.Sound(sound.audioClips[(int)SOUND.ONHIT]);
+    }
+
     protected virtual void Attack()
     {
         animator.SetBool("Attack", true);
@@ -66,6 +86,8 @@ public abstract class Unit : MonoBehaviour
     protected virtual void Die()
     {
         animator.Play("Die");
+        SoundManager.instance.Sound(sound.audioClips[(int)SOUND.DIE]);
+        state = State.None;
     }
 
     private void OnHit(float damage)
@@ -73,7 +95,8 @@ public abstract class Unit : MonoBehaviour
         health -= damage;
 
         animator.SetTrigger("Hit");
-
+        SoundManager.instance.Sound(sound.audioClips[1]);
+        
         if (isCheck) state = State.Attack;
         else state = State.Move;
 
