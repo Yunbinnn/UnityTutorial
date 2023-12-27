@@ -16,6 +16,7 @@ public enum SOUND
     DIE,
 }
 
+[RequireComponent(typeof(HPBar))]
 public abstract class Unit : MonoBehaviour
 {
     protected float traceSpeed;
@@ -24,8 +25,11 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] State state;
     [SerializeField] Animator animator;
     [SerializeField] GameObject target;
-    [SerializeField] protected float health;
 
+    [SerializeField] protected float health;
+    [SerializeField] protected float maxHealth;
+
+    [SerializeField] HPBar healthBar;
     [SerializeField] Sound sound = new();
 
     private bool isCheck = false;
@@ -33,6 +37,7 @@ public abstract class Unit : MonoBehaviour
     private void Awake()
     {
         target = GameObject.Find("Player");
+        healthBar = GetComponent<HPBar>();
         animator = GetComponent<Animator>();
     }
 
@@ -40,15 +45,16 @@ public abstract class Unit : MonoBehaviour
     {
         switch (state)
         {
-            case State.Move: Move();
+            case State.Move:
+                Move();
                 break;
-            case State.Attack: Attack();
+            case State.Attack:
+                Attack();
                 break;
-            case State.Hit: OnHit(10); 
+            case State.Die:
+                Die();
                 break;
-            case State.Die: Die();
-                break;
-            case State.None: 
+            case State.None:
                 break;
         }
     }
@@ -86,17 +92,22 @@ public abstract class Unit : MonoBehaviour
     protected virtual void Die()
     {
         animator.Play("Die");
+
         SoundManager.instance.Sound(sound.audioClips[(int)SOUND.DIE]);
+
         state = State.None;
     }
 
-    private void OnHit(float damage)
+    public void OnHit(float damage)
     {
+        if (health <= 0) return;
+
         health -= damage;
 
         animator.SetTrigger("Hit");
-        SoundManager.instance.Sound(sound.audioClips[1]);
-        
+
+        healthBar.UpdateHP(health, maxHealth);
+
         if (isCheck) state = State.Attack;
         else state = State.Move;
 
