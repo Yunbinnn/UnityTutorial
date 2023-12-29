@@ -366,6 +366,9 @@
 "Assets/06.Instatiate/02.Scripts/Unit/Unit.cs"
 "Assets/07.Character Select/02.Scripts/CharacterSelected.cs"
 "Assets/07.Character Select/02.Scripts/CharacterSelectManager.cs"
+"Assets/07.Character Select/02.Scripts/Data Manager.cs"
+"Assets/08.Physics/02.Scripts/GameManager.cs"
+"Assets/08.Physics/02.Scripts/Player.cs"
 -langversion:9.0
 
 /deterministic
