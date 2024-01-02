@@ -119,7 +119,7 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void Release()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     // OnTriggerEnter() : Trigger와 충돌이 되었을 때 이벤트를 호출하는 함수입니다.

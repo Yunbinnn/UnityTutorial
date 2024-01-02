@@ -358,6 +358,7 @@
 "Assets/06.Instatiate/02.Scripts/Factory.cs"
 "Assets/06.Instatiate/02.Scripts/HPBar.cs"
 "Assets/06.Instatiate/02.Scripts/Mouse.cs"
+"Assets/06.Instatiate/02.Scripts/ObjectPool.cs"
 "Assets/06.Instatiate/02.Scripts/Rifle.cs"
 "Assets/06.Instatiate/02.Scripts/SoundManager.cs"
 "Assets/06.Instatiate/02.Scripts/SpawnManager.cs"
