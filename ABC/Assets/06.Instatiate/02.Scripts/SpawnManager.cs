@@ -21,7 +21,7 @@ public class SpawnManager : MonoBehaviour
             ObjectPool.instance.GetObjectPool();
 
             // new WaitForSeconds() : 특정한 시간동안 코루틴을 대기합니다.
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(3f);
         }
     }
 }

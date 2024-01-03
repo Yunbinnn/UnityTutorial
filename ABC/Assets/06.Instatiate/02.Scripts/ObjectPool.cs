@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
@@ -12,15 +11,11 @@ public class ObjectPool : MonoBehaviour
     [SerializeField] int activeCount = 0;
     [SerializeField] int createCount = 5;
     [SerializeField] List<GameObject> unitList;
-    GameObject pool;
 
     void Awake()
     {
         if (instance == null) instance = this;
-    }
 
-    void Start()
-    {
         unitList.Capacity = 20;
         CreatePool();
     }
@@ -58,5 +53,10 @@ public class ObjectPool : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void InsertObject(GameObject prefab)
+    {
+        prefab.SetActive(false);
     }
 }

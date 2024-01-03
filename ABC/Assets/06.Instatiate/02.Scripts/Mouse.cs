@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 public enum CURSOR
@@ -31,11 +30,6 @@ public class Mouse : MonoBehaviour
         {
             SetCursor(CURSOR.HOLD);
         }
-    }
-
-    IEnumerator Attack()
-    {
-        yield return new WaitForSeconds(3f);
     }
 
     public void SetCursor(CURSOR cursorImage)

@@ -25,6 +25,7 @@ public abstract class Unit : MonoBehaviour
     [SerializeField] State state;
     [SerializeField] Animator animator;
     [SerializeField] GameObject target;
+    [SerializeField] Vector3 originDirection;
 
     [SerializeField] protected float health;
     [SerializeField] protected float maxHealth;
@@ -39,6 +40,14 @@ public abstract class Unit : MonoBehaviour
         target = GameObject.Find("Player");
         healthBar = GetComponent<HPBar>();
         animator = GetComponent<Animator>();
+    }
+
+    private void OnEnable()
+    {
+        health = maxHealth;
+        healthBar.UpdateHP(health, maxHealth);
+        state = State.Move;
+        originDirection = transform.position;
     }
 
     private void Update()
@@ -57,6 +66,8 @@ public abstract class Unit : MonoBehaviour
             case State.None:
                 break;
         }
+
+        healthBar.UpdateHP(health, maxHealth);
     }
 
     protected virtual void Move()
@@ -119,7 +130,7 @@ public abstract class Unit : MonoBehaviour
 
     public virtual void Release()
     {
-        gameObject.SetActive(false);
+        ObjectPool.instance.InsertObject(gameObject);
     }
 
     // OnTriggerEnter() : Trigger와 충돌이 되었을 때 이벤트를 호출하는 함수입니다.
@@ -140,5 +151,11 @@ public abstract class Unit : MonoBehaviour
     {
         state = State.Move;
         isCheck = false;
+    }
+
+    private void OnDisable()
+    {
+        transform.position = originDirection;
+        healthBar.UpdateHP(health, maxHealth);
     }
 }
